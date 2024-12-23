@@ -1,3 +1,4 @@
 theme: minima
 paginate: 5 # Number of posts per page
 paginate_path: "/page:num" # Optional pagination path
+
