@@ -1,13 +1,40 @@
+# Site settings
+title: Your Site Title
+description: Your site description
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
 theme: minima
 
+# Navigation
 nav:
   - name: "Home"
     link: "/"
   - name: "Blog"
     link: "/blog/"
 
+# Pagination
 paginate: 5
-paginate_path: "/page:num"
+paginate_path: "/blog/page:num/"
 
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:categories/:year/:month/:day/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      
+# Plugins
 plugins:
   - jekyll-paginate
+  - jekyll-feed
+  - jekyll-seo-tag
