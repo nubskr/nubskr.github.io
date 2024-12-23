@@ -1,5 +1,4 @@
 ---
 layout: home
+title: "wtf Blog"
 ---
-# Wut dis?
-djiiofjsf silfjio jsifjeio
