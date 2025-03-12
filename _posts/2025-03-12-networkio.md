@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "networkio, a lightweight application level networking protocol built on top of TCP"
+title: "networkio, a lightweight networking protocol built on top of TCP"
 ---
 
 a lightweight application layer networking protocol ensuring resilient message delivery and connection handling without giving any fuss to the user
