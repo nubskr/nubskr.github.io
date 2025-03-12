@@ -5,7 +5,7 @@ title: "networkio, a lightweight application level networking protocol built on 
 
 a lightweight application layer networking protocol ensuring resilient message delivery and connection handling without giving any fuss to the user
 
-![networio](./networkio.png)
+![networio](https://raw.githubusercontent.com/nubskr/nubskr.github.io/refs/heads/master/_posts/networkio.png)
 
 - guarantees FIFO messages delivery
 
