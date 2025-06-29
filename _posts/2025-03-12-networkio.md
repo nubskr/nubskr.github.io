@@ -30,10 +30,56 @@ a lightweight application layer networking protocol ensuring resilient message d
 
 example server:
 ```
-<go_server_code>
+import (
+	"github.com/nubskr/networkio/networkio"
+)
+
+func main() {
+	networkio.AcceptConnRequestLoop("server-001")
+
+    err := conn.WriteToConn("Hello");
+    
+    if err != nil {
+        log.Fatalf("Failed to send message: %v", err)
+    }
+}
 ```
 
 and just do this for client:
 ```
-<go_client_code>
+import (
+	"github.com/nubskr/networkio/networkio"
+)
+
+// reads everything the peer sends
+func worker() {
+	log.Print("worker started")
+	for {
+		connId := <-networkio.MasterMessageQueue
+		conn, exists := networkio.Manager.GetConnFromConnId(connId)
+		if exists {
+			msg := conn.ReadFromConn().Data.(string)
+			log.Print("new message received: ", msg)
+		} else {
+			panic("conn does not exist")
+		}
+	}
+}
+
+func main() {
+	serverAddress := "127.0.0.1"
+	serverPort := "8080"
+
+	clientID := "client-123"
+
+	go worker()
+
+	conn, err := networkio.InitConnection(serverAddress, serverPort, clientID)
+
+    if err != nil {
+		log.Fatalf("Failed to connect: %v", err)
+	}
+
+    select {}
+}
 ```

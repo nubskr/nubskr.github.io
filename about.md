@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-A place to collect interesting ideas without being bothered with what's acceptable or not in the outside world
+A place to collect things which I found interesting
