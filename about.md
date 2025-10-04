@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-A place to collect things which I found interesting
+I like building fast things from first principles 

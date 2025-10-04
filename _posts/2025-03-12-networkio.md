@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NetworkIO: A Lightweight Networking Protocol Built Over TCP"
+title: "networkio: a lightweight networking protocol built over tcp"
 ---
 
 [github](https://github.com/nubskr/networkio)
