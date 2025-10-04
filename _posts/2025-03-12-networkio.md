@@ -1,38 +1,47 @@
 ---
 layout: post
-title: "networkio, a lightweight networking protocol built over TCP"
+title: "NetworkIO: A Lightweight Networking Protocol Built Over TCP"
 ---
 
-a lightweight application layer networking protocol ensuring resilient message delivery and connection handling without giving any fuss to the user
+[github](https://github.com/nubskr/networkio)
 
-![networio](https://raw.githubusercontent.com/nubskr/nubskr.github.io/refs/heads/master/_posts/networkio.png)
+A lightweight application layer networking protocol that ensures resilient message delivery and connection handling without any hassle for the user.
 
-- guarantees FIFO messages delivery
+![NetworkIO Architecture](https://raw.githubusercontent.com/nubskr/nubskr.github.io/refs/heads/master/_posts/networkio.png)
 
-- takes care of all things networking, sending stuff, receiving stuff, queueing stuff, buffering stuff, broken connections, reconnections, retransmitting messages, ensuring that the messages get delivered relibly with ACKs, serialization, and all the stuff 
+## Core Features
 
-- built on top of TCP
+### Reliable Message Delivery
 
-- uses GOB for serialization
+The protocol guarantees FIFO message delivery. Every message is considered read only when the receiving peer acknowledges it, ensuring reliable communication with built-in ACKs.
 
-- peers can recognize each other after reconnection and retransmit what was left unsaid(wish real life worked like that)
+### Complete Networking Abstraction
 
-- handles thousands of active connections without any fuss
+NetworkIO handles all the networking complexity: sending, receiving, queueing, buffering, broken connections, reconnections, retransmitting messages, and ensuring reliable delivery with acknowledgments and serialization. It's all taken care of.
 
-- A message is considered read when a peer acknowledges it
+### Connection Resilience
 
-- The application only has to deal with two APIs for the most part, want to send a message to a peer ? it's all notifications, just add a notification telling who to tell what and you'll be notified when they receive it, similarily when you receive something from a peer you'll be notified and they'll know for certain that you have received the message
+Built on TCP with GOB serialization, the protocol allows peers to recognize each other after reconnection and retransmit undelivered messages. (If only real life worked like that.) The system handles thousands of active connections without any issues.
 
-- the notifications queues are extremely lightweight, only delivering notifications, the application chooses what to do with those notifications, the notification just lets the application know them know there is data to be read in some connection, and the application can either sit on it, and go ahead and read it with a simple networkio API , it can read all the messages from that peer, or just 1 or 2 or whatever it wants, and the rest will be there to be read 
+## Simple API Design
 
-- so simple even a primate could use it
+### Two Primary APIs
 
-Example:
+The application primarily deals with just two APIs. Need to send a message to a peer? It's all notification-based. Add a notification specifying who to send what to, and you'll be notified when they receive it. Similarly, when you receive something from a peer, you get notified, and they'll know for certain that you received the message.
 
-server side code:
-```
+### Lightweight Notification Queues
+
+The notification queues are extremely lightweight, only delivering notifications. The application decides what to do with them. A notification simply informs the application that there's data to read in a connection. The application can choose to sit on it or read it immediately using a simple NetworkIO API. You can read all messages from a peer, or just one or two, whatever you need. The rest remain available to read later.
+
+So simple even a primate could use it.
+
+## Example Implementation
+
+### Server Side
+
+```go
 func main() {
-	networkio.AcceptConnRequestLoop("server-001")
+    networkio.AcceptConnRequestLoop("server-001")
 
     err := conn.WriteToConn("Hello");
     
@@ -42,28 +51,29 @@ func main() {
 }
 ```
 
-client side code:
-```
+### Client Side
+
+```go
 // reads everything the peer sends
 func worker() {
-	for {
-		connId := <-networkio.MasterMessageQueue
-		conn, exists := networkio.Manager.GetConnFromConnId(connId)
-		if exists {
-			msg := conn.ReadFromConn().Data.(string)
-			log.Print("new message received: ", msg)
-		}
-	}
+    for {
+        connId := <-networkio.MasterMessageQueue
+        conn, exists := networkio.Manager.GetConnFromConnId(connId)
+        if exists {
+            msg := conn.ReadFromConn().Data.(string)
+            log.Print("new message received: ", msg)
+        }
+    }
 }
 
 func main() {
-	go worker()
+    go worker()
 
-	conn, err := networkio.InitConnection("127.0.0.1", "8080","client-123")
+    conn, err := networkio.InitConnection("127.0.0.1", "8080","client-123")
 
     if err != nil {
-		log.Fatalf("Failed to connect: %v", err)
-	}
+        log.Fatalf("Failed to connect: %v", err)
+    }
 
     select {}
 }
